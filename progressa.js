@@ -6,10 +6,10 @@ const ytdl = require('ytdl-core');
 const dl = (url, fileName) => {
 
   // const url = 'https://www.youtube.com/watch?v=mHhZ9jk-DrU';
-  const output = path.resolve(__dirname, `${fileName}.mp4`);
+  const output = path.resolve(__dirname, `${fileName}.m4a`);
 
 
-  const video = ytdl(url, {quality: 'highest'});
+  const video = ytdl(url, { filter: (format) => format.container === 'm4a' });
   let starttime;
   video.pipe(fs.createWriteStream(output));
   video.once('response', () => {
@@ -38,12 +38,11 @@ const rl = readline.createInterface({
 
 rl.question("link? ", function(url) {
   // TODO: Log the answer in a database
-  rl.question('fileName? ', function(fileName) {
-    rl.close();
+  rl.question('fileName? ', (fileName) => {
     console.log("Working on it...");
+    rl.close();
     dl(url, fileName);
   })
 });
-
 
 
